@@ -28,6 +28,10 @@ class RedisClient
      */
     static function getInstance($configs)
     {
+        if ( !extension_loaded('redis') ) {
+            return false;
+        }
+        
         if (!self::$instance) {
             self::$instance = new self($configs);
         }
@@ -311,7 +315,7 @@ class RedisClient
      * @param $key
      * @param $val
      */
-    public function lPush($key,$val)
+    public function lPush($key, $val)
     {
         $this->getRedis($key)->lPush($key,$val);
     }
@@ -322,9 +326,16 @@ class RedisClient
      */
     public function lPop($key)
     {
-        $this->getRedis($key)->lPop($key);
+        return $this->getRedis($key)->lPop($key);
     }
 
+    /**
+     * 获取队列的总数
+    */
+    public function lLen($key)
+    {
+        return $this->getRedis($key)->lLen($key);
+    }
 
     /**
      * 批量的添加多个key 到redis
