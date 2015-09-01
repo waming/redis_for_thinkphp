@@ -57,6 +57,10 @@ class RedisClient
 
         $obj = new \Redis;
         $obj->pconnect($redis_arr[$arr_index]['host'], $redis_arr[$arr_index]['port']);
+        /* 更新redis的密码验证 */
+        if ($redis_arr[$arr_index]['auth']) {
+            $obj->auth($redis_arr[$arr_index]['auth']);
+        }
         self::$linkHandle[$tag] = $obj;
         return $obj;
     }
